@@ -57,6 +57,13 @@ if uploaded_file:
     key=lambda x: pd.to_datetime(x, format='%b %Y')
 )
     category_total = df.groupby('category').size().reset_index(name='total_count')
+    today = pd.to_datetime(datetime.today())
+
+    df['days_on_hold'] = (today - df['NEXT_BILLING_DATE']).dt.days
+    hold_30_days = df[df['days_on_hold'] > 30]
+    hold_30_count = hold_30_days['ACCOUNT_NO'].nunique()
+
+    
 
     # Grouped category
     df['category_grouped'] = df['category'].apply(
@@ -72,6 +79,9 @@ if uploaded_file:
     # --- DISPLAY ---
     st.subheader("📌Total Suppression Count")
     st.write(grand_total)
+
+    st.subheader("⏳ Accounts on Hold > 30 Days")
+    st.write(hold_30_count)
 
     st.subheader("📅 Month-wise Suppression Count")
     st.dataframe(month_total)
