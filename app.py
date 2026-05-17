@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from pptx import Presentation
-from pptx.util import Inches
 import tempfile
 
 st.title("📊 CSV to Insights")
@@ -83,33 +81,4 @@ if uploaded_file:
 
     st.subheader("📊 Space Out vs Business Suppression")
     st.dataframe(grouped_summary)
-    # --- PPT GENERATION ---
-    if st.button("Generate PPT"):
-
-        prs = Presentation()
-
-        # Title slide
-        slide = prs.slides.add_slide(prs.slide_layouts[0])
-        slide.shapes.title.text = "CSV Insights Report"
-
-        # Summary slide
-        slide = prs.slides.add_slide(prs.slide_layouts[1])
-        slide.shapes.title.text = "Summary"
-        content = slide.placeholders[1]
-
-        text = f"Total Records: {grand_total}\n\nCategory Breakdown:\n"
-        for _, row in category_total.iterrows():
-            text += f"{row['category']}: {row['total_count']}\n"
-
-        content.text = text
-
-        # Save temp file
-        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".pptx")
-        prs.save(tmp.name)
-
-        with open(tmp.name, "rb") as f:
-            st.download_button(
-                "⬇ Download PPT",
-                f,
-                file_name="report.pptx"
-            )
+   
