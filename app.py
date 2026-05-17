@@ -16,7 +16,7 @@ if uploaded_file:
     today = datetime.today()
 
     # Filter dates
-    df = df[df['NEXT_BILLING_DATE'].dt.year != 2025]
+    df = df[df['NEXT_BILLING_DATE'].dt.year >= 2026]
     df = df[
         (df['NEXT_BILLING_DATE'].dt.year < today.year) |
         (
